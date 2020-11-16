@@ -5,15 +5,15 @@ services:
     image: postgres:latest
     env_file: ${PWD-.}/config/db.env
     volumes:
-      - ./database:/var/lib/mysql
-      - ${PWD-.}/mysql-db:/docker-entrypoint-initdb.d
+      - ./database:/var/lib/mysql:z
+      - ${PWD-.}/mysql-db:/docker-entrypoint-initdb.d:z
     restart: unless-stopped
   redis:
     hostname: redis:5
     image: redis:latest
     command: ["redis-server", "--appendonly", "no"]
     volumes:
-      - ${PWD-.}/redis:/data
+      - ${PWD-.}/redis:/data:z
     restart: always
   nwserver:
     hostname: nwserver
@@ -25,18 +25,22 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ${PWD-.}/logs:/nwn/run/logs.0
-      - ${PWD-.}/server/:/nwn/home
+      - ${PWD-.}/logs:/nwn/run/logs.0:z
+      - ${PWD-.}/server/:/nwn/home:z
     restart: unless-stopped
     ports:
       - "5121:5121/udp"
+    depends_on:
+      - influxdb
+      - db
+      - caddy
   influxdb:
     hostname: influxdb
     image: influxdb:1.7
     restart: unless-stopped
     env_file: ${PWD-.}/config/influxdb.env
     volumes:
-    - influxdb:/var/lib/influxdb
+    - influxdb:/var/lib/influxdb:z
   grafana:
     hostname: grafana
     image: grafana/grafana:6.0.1
@@ -45,8 +49,21 @@ services:
     - influxdb
     env_file: ${PWD-.}/config/grafana.env
     volumes:
-    - ./grafana-provisioning:/etc/grafana/provisioning
-    - grafana:/var/lib/grafana
+    - ./grafana-provisioning:/etc/grafana/provisioning:z
+    - grafana:/var/lib/grafana:z
+    ports:
+      - "3000:3000"
+    depends_on:
+      - influxdb
+  caddy:
+    image: caddy:latest
+    ports:
+      - 80:80
+    command: caddy file-server
+    volumes:
+      - ./caddy/www:/srv:z
+      - ./caddy/data:/data:z
+      - ./caddy/config:/config:z
 volumes:
   influxdb:
   grafana:

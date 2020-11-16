@@ -14,11 +14,29 @@ $ git clone https://github.com/Urothis/nwnxee-template.git
 ```
 
 **Rename the configuration files**
+
+Modify the config files - `grafana.env`, `nwserver.env`.
+Remember to replace YOUR_EXTERNAL_IP in NWN_NWSYNCURL with the external IP address of your machine.
+
+**Add your files**
+
+Copy your module, tlk, and haks to `server/modules`, `server/tlk`, and `server/hak` respectively.
+
+**Set up NWSync**
+
+Linux:
 ```shell
 $ cd /path/to/repo
-$ cp config/db.env.example config/db.env
-$ cp config/nwserver.env.example config/nwserver.env
+$ mkdir -p caddy/www/nwsync
+$ ./tools/nwsync.sh
 ```
+Windows - Powershell (TODO: test this):
+```powershell
+> cd /path/to/repo
+> mkdir caddy/www/nwsync -force
+> ./tools/nwsync.ps1
+```
+This will generate the files and manifest for NWSync.
 
 **Start the server**
 ```shell
@@ -54,7 +72,8 @@ Settings for the server can be changed by editing the `config/nwserver.env` file
 * For further nwnxee configuration, see the [nwnxee documentation](https://hub.docker.com/r/nwnxee/nwserver).
 
 **Module**
-The bundled module DockerDemo is loaded by default. To load a different module, say `mymodule`, place the module file in `/path/to/repo/server/modules/` as `mymodule.mod` and change the environment variable in `/path/to/repo/config/nwserver.env` to `NWN_MODULE=mymodule`.
+
+To load a different module, say `mymodule`, place the module file in `/path/to/repo/server/modules/` as `mymodule.mod` and change the environment variable in `/path/to/repo/config/nwserver.env` to `NWN_MODULE=mymodule`.
 
 ## Acknowledgments
 * [Beamdog](https://www.beamdog.com/)

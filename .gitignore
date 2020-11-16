@@ -12,6 +12,8 @@ mysql-db
 redis
 logs
 lua
+caddy/www
+autosave.json
 
 # Other #
 ###################
