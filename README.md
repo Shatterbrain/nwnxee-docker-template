@@ -16,7 +16,7 @@ $ git clone https://github.com/Urothis/nwnxee-template.git
 **Rename the configuration files**
 
 Modify the config files - `grafana.env`, `nwserver.env`.
-Remember to replace YOUR_EXTERNAL_IP in NWN_NWSYNCURL with the external IP address of your machine.
+Remember to replace `YOUR_EXTERNAL_IP` in `NWN_NWSYNCURL` with the external IP address of your machine. To find the external IP of your current machine easily, you can visit ipchicken.com.
 
 **Add your files**
 
@@ -32,7 +32,7 @@ $ ./tools/nwsync.sh
 ```
 Windows - Powershell (TODO: test this):
 ```powershell
-> cd /path/to/repo
+> cd C:/path/to/repo
 > mkdir caddy/www/nwsync -force
 > ./tools/nwsync.ps1
 ```
